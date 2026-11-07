@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10233a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Cobros de ruta</title>
+<style>
+:root{
+  --ink:#10233a; --ink2:#1b3a5c; --paper:#eef2f6; --card:#fff; --line:#d5dde6;
+  --mute:#5b6b7c; --ok:#0b7a4b; --okbg:#e7f6ee; --warn:#b45309; --warnbg:#fef3c7;
+  --bad:#b42318; --badbg:#fee2e2; --acc:#0e7490;
+  --shadow:0 2px 12px rgba(16,35,58,.08);
+}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);padding-bottom:calc(78px + env(safe-area-inset-bottom));font-variant-numeric:tabular-nums}
+header{background:linear-gradient(135deg,var(--ink),var(--ink2));color:#fff;padding:calc(14px + env(safe-area-inset-top)) 16px 14px;position:sticky;top:0;z-index:5}
+header h1{font-size:20px;font-weight:800;letter-spacing:-.3px}
+header small{color:#b9c6d6;text-transform:capitalize;font-size:13px}
+main{max-width:640px;margin:0 auto;padding:12px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.dark{background:linear-gradient(135deg,var(--ink),var(--ink2));color:#fff;border:0}
+.card.dark .sub{color:#b9c6d6}
+.card.dark b{color:#fff}
+h2{font-size:17px;margin-bottom:10px;letter-spacing:-.2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sub{font-size:13px;color:var(--mute);margin-top:2px}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;line-height:1.5;white-space:nowrap}
+.b-ok{background:var(--okbg);color:var(--ok)}
+.b-warn{background:var(--warnbg);color:var(--warn)}
+.b-bad{background:var(--badbg);color:var(--bad)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.kpis div{padding:12px 6px 10px;text-align:center}
+.kpis div+div{border-left:1px solid var(--line)}
+.kpis .ico{font-size:20px;line-height:1}
+.kpis b{display:block;font-size:19px;margin-top:2px}
+.kpis span{font-size:12px;color:var(--mute)}
+.bar{height:12px;background:#e2e8f0;border-radius:999px;margin:14px 0 6px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),#34d399);border-radius:999px;transition:width .3s}
+.bar-lbl{font-size:12px;color:var(--mute);text-align:right}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font:600 13px inherit;color:var(--ink);min-height:40px;cursor:pointer}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.item{padding:12px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.acts .btn{flex:1;min-width:120px}
+.btn{border:0;border-radius:12px;background:var(--ink);color:#fff;font:600 15px inherit;padding:12px 16px;min-height:48px;cursor:pointer}
+.btn.sec{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:var(--bad)}
+.btn.big{width:100%;margin-top:14px;min-height:52px;font-size:16px}
+.btn.sm{min-height:40px;padding:8px 12px;font-size:14px}
+.btn.xs{min-height:36px;padding:5px 9px;font-size:13px;border-radius:8px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,.chip:focus-visible{outline:3px solid #3b82f6;outline-offset:2px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-weight:600;text-align:right;color:var(--mute);padding:6px 4px;border-bottom:2px solid var(--ink)}
+th:first-child,td:first-child{text-align:left}
+td{padding:8px 4px;border-bottom:1px solid var(--line);text-align:right;vertical-align:middle}
+td:first-child{max-width:96px;overflow-wrap:anywhere}
+td .acts{margin-top:0;flex-wrap:nowrap}
+td .acts .btn{flex:none;min-width:0}
+tfoot td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+.res{margin-top:12px;padding:14px;background:linear-gradient(135deg,var(--ink),var(--ink2));color:#fff;border-radius:12px;font-size:17px}
+.res b{font-size:23px}
+label{display:block;font-size:14px;font-weight:600;margin-top:12px}
+input,select{width:100%;font:inherit;font-weight:400;padding:12px;border:1px solid var(--line);border-radius:10px;margin-top:5px;background:#fff;color:var(--ink)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:5px}
+.seg button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:12px 4px;font:600 14px inherit;color:var(--ink);min-height:48px}
+.seg button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chk{display:flex;gap:10px;align-items:center;font-weight:400}
+.chk input{width:22px;height:22px;margin:0}
+#gps{font-size:15px;margin-bottom:10px}
+#gps.hit{color:var(--ok);font-weight:600}
+.empty{text-align:center;color:var(--mute);padding:22px 8px;font-size:15px;line-height:1.6}
+.empty .big{font-size:32px;display:block;margin-bottom:6px}
+details summary{cursor:pointer;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary .sum-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+details summary .sum-top::after{content:'▾';color:var(--mute);font-size:14px}
+details[open ] summary .sum-top::after{content:'▴'}
+nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav button{border:0;background:none;padding:10px 2px 12px;font:600 13px inherit;color:var(--mute);min-height:56px}
+nav button .ni{display:block;font-size:19px;line-height:1.2}
+nav button.on{color:var(--ink);box-shadow:inset 0 3px 0 var(--ink)}
+dialog{border:0;border-radius:16px;padding:20px;width:min(92vw,380px);margin:auto;color:var(--ink)}
+dialog::backdrop{background:#0008}
+#toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9;max-width:90vw;text-align:center}
+#toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><h1>💰 Cobros de ruta</h1><small id="fecha"></small></header>
+<main>
+  <!-- HOY -->
+  <section id="v-hoy" class="on">
+    <div class="card">
+      <div id="gps">Toca el botón para saber si estás en una tienda guardada.</div>
+      <button class="btn sec" data-a="detectar">📍 Detectar tienda</button>
+    </div>
+    <div id="hoyDin"></div>
+  </section>
+
+  <!-- AGREGAR -->
+  <section id="v-add">
+    <div class="card">
+      <h2>Nuevo movimiento</h2>
+      <label>Concepto o tienda<input id="fNombre" list="dl" autocomplete="off" placeholder="Ej. Abarrotes Eva"></label>
+      <datalist id="dl"></datalist>
+      <div class="g2">
+        <label>Créditos pagados<input id="fPag" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+        <label>Abono<input id="fAb" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+      </div>
+      <label>Créditos nuevos<input id="fNue" type="number" inputmode="decimal" step="any" placeholder="0"></label>
+      <label>Plazo del crédito nuevo</label>
+      <div class="seg" id="plazo">
+        <button type="button" data-p="2" class="on">2 días</button>
+        <button type="button" data-p="7">1 semana</button>
+        <button type="button" data-p="x">Otro</button>
+      </div>
+      <input id="fDias" type="number" inputmode="numeric" min="1" placeholder="Días de plazo" hidden>
+      <label>Margen GPS en metros<input id="fRadio" type="number" inputmode="numeric" value="100" min="20" max="500"></label>
+      <label class="chk"><input type="checkbox" id="fAct"> Actualizar la ubicación de esta tienda</label>
+      <button class="btn big" data-a="guardar">Guardar y capturar GPS</button>
+    </div>
+  </section>
+
+  <!-- BUSCAR -->
+  <section id="v-buscar">
+    <div class="card">
+      <label style="margin-top:0">Buscar tienda<input id="q" type="search" placeholder="Nombre de la tienda" autocomplete="off"></label>
+    </div>
+    <div id="cartera"></div>
+    <div id="bres"></div>
+    <div class="acts">
+      <button class="btn sec" data-a="backup">⬇️ Descargar respaldo</button>
+      <button class="btn sec" data-a="importar">⬆️ Importar respaldo</button>
+    </div>
+    <input type="file" id="impFile" accept=".json,application/json" hidden>
+  </section>
+
+  <!-- HISTORIAL -->
+  <section id="v-hist">
+    <div class="card">
+      <h2>🕘 Historial</h2>
+      <div class="sub">Últimos 14 días con sus movimientos y totales. Toca un día para ver el detalle.</div>
+    </div>
+    <div id="histDin"></div>
+  </section>
+</main>
+
+<nav>
+  <button data-tab="hoy" class="on"><span class="ni">📅</span>Hoy</button>
+  <button data-tab="add"><span class="ni">➕</span>Agregar</button>
+  <button data-tab="buscar"><span class="ni">🔍</span>Buscar</button>
+  <button data-tab="hist"><span class="ni">🕘</span>Historial</button>
+</nav>
+
+<dialog id="dlg">
+  <h2 id="dT"></h2>
+  <div class="sub" id="dS"></div>
+  <label>Monto cobrado<input id="cMonto" type="number" inputmode="decimal" step="any"></label>
+  <div class="acts">
+    <button class="btn sec" data-a="cancel">Cancelar</button>
+    <button class="btn" data-a="okcobro">Registrar cobro</button>
+  </div>
+</dialog>
+<div id="toast" role="status"></div>
+
+<script>
+'use strict';
+/* ========== Utilidades ========== */
+const $ = s => document.querySelector(s);
+const KEY = 'cobros_v1';
+let DB = JSON.parse(localStorage.getItem(KEY) || 'null') || {tiendas:[], creditos:[], movs:[], ventas:{}};
+const save = () => localStorage.setItem(KEY, JSON.stringify(DB));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const num = v => parseFloat(v) || 0;
+const fmt = n => '$' + (+n || 0).toLocaleString('es-MX', {minimumFractionDigits:2, maximumFractionDigits:2});
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const iso = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+const hoy = () => iso(new Date());
+const sumaDias = (f, n) => { const d = new Date(f + 'T12:00:00'); d.setDate(d.getDate() + n); return iso(d); };
+const difDias = f => Math.round((new Date(f + 'T12:00:00') - new Date(hoy() + 'T12:00:00')) / 864e5);
+const plazoTxt = p => p === 2 ? '2 días' : p === 7 ? '1 semana' : p + ' días';
+const venceTxt = c => { const d = difDias(c.fechaCobro); return d < 0 ? 'Atrasado ' + (-d) + ' d' : d === 0 ? 'Vence hoy' : 'Vence en ' + d + ' d'; };
+const fechaBonita = f => {
+  if (f === hoy()) return 'Hoy';
+  const a = new Date(f + 'T12:00:00');
+  if (f === sumaDias(hoy(), -1)) return 'Ayer';
+  return a.toLocaleDateString('es-MX', {weekday:'short', day:'numeric', month:'short', year:'numeric'});
+};
+const badge = c => {
+  if (c.estado === 'pagado') return '<span class="badge b-ok">✓ Pagado</span>';
+  const d = difDias(c.fechaCobro);
+  return d < 0 ? '<span class="badge b-bad">Vencido ' + (-d) + ' d</span>' : d === 0 ? '<span class="badge b-warn">Vence hoy</span>' : '<span class="badge b-ok">Al corriente</span>';
+};
+let tT;
+function toast(m){ const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(tT); tT = setTimeout(() => t.classList.remove('on'), 2600); }
+
+/* ========== Datos ========== */
+const tienda = id => DB.tiendas.find(t => t.id === id);
+const getTienda = n => DB.tiendas.find(t => norm(t.nombre) === norm(n));
+const pendientes = tid => DB.creditos.filter(c => c.tiendaId === tid && c.estado === 'pendiente').sort((a,b) => a.fechaCobro.localeCompare(b.fechaCobro));
+const saldoTienda = tid => pendientes(tid).reduce((s,c) => s + c.saldo, 0);
+const cartera = () => {
+  let total = 0, n = 0;
+  DB.tiendas.forEach(t => { const s = saldoTienda(t.id); if (s > 0.009){ total += s; n++; } });
+  return {total: +total.toFixed(2), n};
+};
+
+/* Aplica un pago a los créditos de la tienda (el indicado primero, luego los más viejos).
+   Devuelve la lista de aplicaciones [{creditoId, monto}] para poder anular el movimiento. */
+function aplicarPago(tid, monto, fecha, primeroId){
+  let r = monto;
+  const aplicado = [];
+  const lista = pendientes(tid).sort((a,b) => (b.id === primeroId) - (a.id === primeroId));
+  for (const c of lista){
+    if (r <= 0) break;
+    const p = Math.min(r, c.saldo);
+    c.saldo = +(c.saldo - p).toFixed(2);
+    r = +(r - p).toFixed(2);
+    c.pagos.push({f: fecha, m: p});
+    aplicado.push({creditoId: c.id, monto: p});
+    if (c.saldo <= 0.009){ c.saldo = 0; c.estado = 'pagado'; }
+  }
+  return aplicado;
+}
+
+/* ========== GPS (Haversine) ========== */
+const haversine = (la1, lo1, la2, lo2) => {
+  const R = 6371000, r = x => x * Math.PI / 180, dl = r(la2-la1), dn = r(lo2-lo1);
+  const h = Math.sin(dl/2)**2 + Math.cos(r(la1)) * Math.cos(r(la2)) * Math.sin(dn/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+};
+const pos = () => new Promise((ok, no) => navigator.geolocation
+  ? navigator.geolocation.getCurrentPosition(p => ok(p.coords), no, {enableHighAccuracy:true, timeout:15000, maximumAge:10000})
+  : no(new Error('Sin GPS')));
+
+async function detectar(){
+  const g = $('#gps'); g.className = ''; g.textContent = 'Buscando tu ubicación…';
+  try{
+    const c = await pos();
+    const cerca = DB.tiendas.filter(t => t.lat != null)
+      .map(t => ({t, d: haversine(c.latitude, c.longitude, t.lat, t.lng)}))
+      .filter(x => x.d <= x.t.radio).sort((a,b) => a.d - b.d);
+    if (!cerca.length){ g.textContent = 'No estás dentro del margen de ninguna tienda guardada.'; return; }
+    const {t, d} = cerca[0], s = saldoTienda(t.id);
+    g.className = 'hit';
+    g.innerHTML = 'Estás en ' + esc(t.nombre) + ' (a ' + Math.round(d) + ' m).<br>' +
+      (s ? 'Cobro pendiente: ' + fmt(s) : 'Sin cobro pendiente.');
+    if (s) g.innerHTML += '<div class="acts"><button class="btn sm" data-a="cobrar" data-t="' + t.id + '">Cobrar ahora</button></div>';
+  }catch(e){ g.textContent = 'No pude obtener tu ubicación. Activa el permiso de ubicación del navegador.'; }
+}
+
+/* ========== Impresión ESC/POS vía RawBT ========== */
+const W = 32; // 32 columnas = papel de 58 mm. Cambia a 48 si usas 80 mm.
+const sa = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\x20-\x7E]/g, '');
+const lr = (a, b) => { a = sa(a); b = sa(b); return a.slice(0, Math.max(0, W - b.length - 1)).padEnd(W - b.length) + b + '\n'; };
+function raw(fn){
+  const L = [], enc = new TextEncoder();
+  fn({cmd: (...b) => L.push(...b), txt: s => L.push(...enc.encode(sa(s)))});
+  return Uint8Array.from(L);
+}
+function imprimir(bytes){
+  let s = ''; bytes.forEach(b => s += String.fromCharCode(b));
+  location.href = 'rawbt:base64,' + btoa(s);
+}
+const cab = (p, titulo, fecha) => {
+  p.cmd(27,64, 27,97,1, 27,69,1); p.txt(titulo + '\n'); p.cmd(27,69,0);
+  p.txt(fecha + '\n'); p.cmd(27,97,0); p.txt('-'.repeat(W) + '\n');
+};
+const pie = p => { p.txt('\n\n\n'); p.cmd(29,86,66,0); };
+function ticketMov(m){
+  const s = saldoTienda(m.tiendaId);
+  imprimir(raw(p => {
+    cab(p, m.concepto, m.fecha);
+    p.txt(lr('Creditos pagados', fmt(m.pagados)));
+    p.txt(lr('Abono', fmt(m.abono)));
+    p.txt(lr('Creditos nuevos', fmt(m.nuevos)));
+    p.txt('-'.repeat(W) + '\n');
+    p.txt(lr('Saldo pendiente', fmt(s)));
+    p.txt('\nGracias por su pago\n'); pie(p);
+  }));
+}
+function ticketDia(){
+  const h = hoy(), ms = DB.movs.filter(m => m.fecha === h), t = totales(ms), v = DB.ventas[h] || 0;
+  imprimir(raw(p => {
+    cab(p, 'RESUMEN DEL DIA', h);
+    ms.forEach(m => p.txt(lr(m.concepto, fmt(m.pagados + m.abono - m.nuevos))));
+    p.txt('-'.repeat(W) + '\n');
+    p.txt(lr('Creditos pagados', fmt(t.p)));
+    p.txt(lr('Abono', fmt(t.a)));
+    p.txt(lr('Creditos nuevos', fmt(t.n)));
+    p.txt(lr('Venta del dia', fmt(v)));
+    p.cmd(27,69,1); p.txt(lr('RESULTADO', fmt(v + t.p + t.a - t.n))); p.cmd(27,69,0);
+    pie(p);
+  }));
+}
+
+/* ========== Vista: Hoy ========== */
+const totales = ms => ms.reduce((o, m) => ({p:o.p+m.pagados, a:o.a+m.abono, n:o.n+m.nuevos}), {p:0, a:0, n:0});
+let filtroHoy = 'todos';
+
+function vistaHoy(){
+  const h = hoy();
+  const cobradoDe = c => c.pagos.filter(p => p.f === h).reduce((s,p) => s + p.m, 0);
+  const due = DB.creditos.filter(c => c.fechaCobro <= h && (c.estado === 'pendiente' || c.pagos.some(p => p.f === h)));
+  const pend = due.filter(c => c.estado === 'pendiente').sort((a,b) => a.fechaCobro.localeCompare(b.fechaCobro));
+  const falta = pend.reduce((s,c) => s + c.saldo, 0);
+  const cobrado = due.reduce((s,c) => s + cobradoDe(c), 0);
+  const total = falta + cobrado;
+  const ms = DB.movs.filter(m => m.fecha === h), t = totales(ms), venta = DB.ventas[h] || 0;
+  const pct = total ? Math.min(100, Math.round(cobrado / total * 100)) : 0;
+
+  let lista, vacio;
+  if (filtroHoy === 'vencidos'){ lista = pend.filter(c => difDias(c.fechaCobro) < 0); vacio = '🎉 No tienes créditos vencidos.'; }
+  else if (filtroHoy === 'hoy'){ lista = pend.filter(c => difDias(c.fechaCobro) === 0); vacio = 'Nada vence hoy.'; }
+  else if (filtroHoy === 'cobrados'){ lista = due.filter(c => cobradoDe(c) > 0); vacio = 'Aún no cobras nada hoy.'; }
+  else { lista = pend; vacio = total ? 'Todo cobrado por hoy. 🎉' : 'No tienes cobros programados para hoy.'; }
+
+  const chip = (f, txt) => '<button class="chip' + (filtroHoy === f ? ' on' : '') + '" data-f="' + f + '">' + txt + '</button>';
+
+  $('#hoyDin').innerHTML =
+  '<div class="card"><h2>Por cobrar hoy</h2>' +
+    '<div class="kpis"><div><div class="ico">💰</div><b>' + fmt(total) + '</b><span>Por cobrar</span></div>' +
+    '<div><div class="ico">📥</div><b class="ok">' + fmt(cobrado) + '</b><span>Cobrado</span></div>' +
+    '<div><div class="ico">⏳</div><b class="' + (falta ? 'warn' : 'ok') + '">' + fmt(falta) + '</b><span>Falta</span></div></div>' +
+    '<div class="bar"><i style="width:' + pct + '%"></i></div><div class="bar-lbl">' + pct + '% cobrado hoy</div>' +
+    '<div class="chips">' + chip('todos', 'Todos') + chip('vencidos', 'Vencidos') + chip('hoy', 'Vencen hoy') + chip('cobrados', 'Cobrados hoy') + '</div>' +
+    (lista.length ? lista.map(c => {
+      const tn = tienda(c.tiendaId);
+      const cobHoy = cobradoDe(c);
+      return '<div class="item"><div class="row"><b>' + esc(tn.nombre) + '</b><b>' + fmt(c.saldo) + '</b></div>' +
+        '<div class="sub">Crédito a ' + plazoTxt(c.plazo) + ', ' + venceTxt(c) + (filtroHoy === 'cobrados' ? ' · Cobrado hoy: ' + fmt(cobHoy) : '') + '</div>' +
+        '<div class="acts">' + badge(c) +
+        (c.estado === 'pendiente' ? '<button class="btn sm" data-a="cobrar" data-t="' + tn.id + '" data-c="' + c.id + '">Cobrar</button>' : '') + '</div></div>';
+    }).join('') : '<p class="empty">' + vacio + '</p>') +
+  '</div>' +
+  '<div class="card"><h2>Cobros realizados</h2>' +
+    (ms.length ? '<table><thead><tr><th>Concepto</th><th>Pagados</th><th>Abono</th><th>Nuevos</th><th>Acciones</th></tr></thead><tbody>' +
+      ms.map(m => '<tr><td>' + esc(m.concepto) + '</td><td>' + (m.pagados || '—') + '</td><td>' + (m.abono || '—') + '</td><td>' + (m.nuevos || '—') +
+        '</td><td><div class="acts"><button class="btn sec xs" data-a="pmov" data-m="' + m.id + '" aria-label="Imprimir ticket">🖨️</button>' +
+        '<button class="btn danger xs" data-a="anular" data-m="' + m.id + '">Anular</button></div></td></tr>').join('') +
+      '</tbody><tfoot><tr><td>Totales</td><td>' + t.p + '</td><td>' + t.a + '</td><td>' + t.n + '</td><td></td></tr></tfoot></table>'
+      : '<p class="empty"><span class="big">🧾</span>Aún no registras movimientos hoy.<br>Usa “Agregar” o cobra desde esta pantalla.</p>') +
+    '<label>Venta del día<input id="venta" type="number" inputmode="decimal" step="any" value="' + (venta || '') + '" placeholder="0.00"></label>' +
+    '<div class="row res"><span>Resultado del día</span><b id="res">' + fmt(venta + t.p + t.a - t.n) + '</b></div>' +
+    '<div class="sub">Venta + pagados + abono − nuevos</div>' +
+    '<button class="btn sec big" data-a="pdia">Imprimir resumen del día</button>' +
+  '</div>';
+
+  $('#venta').oninput = e => {
+    DB.ventas[h] = num(e.target.value); save();
+    $('#res').textContent = fmt(DB.ventas[h] + t.p + t.a - t.n);
+  };
+}
+
+/* ========== Vista: Buscar ========== */
+function vistaBuscar(){
+  const q = norm($('#q').value || '');
+  const c = cartera();
+  $('#cartera').innerHTML = '<div class="card dark"><div class="row"><span>💰 Cartera total pendiente</span><b>' + fmt(c.total) + '</b></div>' +
+    '<div class="sub">' + (c.n ? c.n + (c.n === 1 ? ' tienda con deuda' : ' tiendas con deuda') : 'Sin deudas pendientes 🎉') + ' · ' + DB.tiendas.length + ' tiendas registradas</div></div>';
+  const lista = DB.tiendas.filter(t => norm(t.nombre).includes(q)).sort((a,b) => saldoTienda(b.id) - saldoTienda(a.id));
+  $('#bres').innerHTML = lista.length ? lista.map(t => {
+    const ps = pendientes(t.id), s = saldoTienda(t.id);
+    const prox = ps[0];
+    return '<div class="card"><div class="row"><b>' + esc(t.nombre) + '</b><b class="' + (s ? 'warn' : 'ok') + '">' + fmt(s) + '</b></div>' +
+      (ps.map(x => '<div class="sub">' + fmt(x.saldo) + ' de ' + fmt(x.monto) + ', plazo ' + plazoTxt(x.plazo) + ', cobro el ' + x.fechaCobro + ' (' + venceTxt(x) + ')</div>').join('') || '<div class="sub">Sin crédito pendiente</div>') +
+      (prox ? '<div class="sub">⏰ Próximo a vencer: ' + fmt(prox.saldo) + ' el ' + prox.fechaCobro + ' (' + venceTxt(prox) + ')</div>' : '') +
+      '<div class="sub">' + (t.lat != null ? '📍 GPS guardado, margen ' + t.radio + ' m' : 'Sin ubicación GPS') + '</div>' +
+      '<div class="acts">' + (s ? '<button class="btn sm" data-a="cobrar" data-t="' + t.id + '">Cobrar</button>' : '') +
+      '<button class="btn sec sm" data-a="histtienda" data-t="' + t.id + '">Ver movimientos</button>' +
+      '<button class="btn sec sm" data-a="gpsup" data-t="' + t.id + '">Guardar mi ubicación aquí</button></div></div>';
+  }).join('') : '<p class="empty"><span class="big">🔍</span>No hay tiendas que coincidan.</p>';
+}
+
+/* ========== Vista: Historial ========== */
+let histTienda = null;
+function vistaHistorial(){
+  const host = $('#histDin'); if (!host) return;
+  const ms = histTienda ? DB.movs.filter(m => m.tiendaId === histTienda) : DB.movs.slice();
+  const dias = {};
+  ms.forEach(m => { (dias[m.fecha] = dias[m.fecha] || []).push(m); });
+  const fechas = Object.keys(dias).sort().reverse().slice(0, histTienda ? 30 : 14);
+
+  let html = '';
+  if (histTienda){
+    const t = tienda(histTienda);
+    html += '<div class="card"><div class="row"><b>📍 ' + esc(t ? t.nombre : 'Tienda') + '</b><button class="btn sec sm" data-a="histtodo">Ver todo</button></div><div class="sub">Movimientos de esta tienda</div></div>';
+  }
+  if (!fechas.length){
+    html += '<div class="card"><p class="empty"><span class="big">🗂️</span>No hay movimientos todavía.<br>Cuando registres cobros aparecerán aquí.</p></div>';
+  }
+  html += fechas.map(f => {
+    const dms = dias[f], t = totales(dms);
+    const v = histTienda ? 0 : (DB.ventas[f] || 0);
+    const res = v + t.p + t.a - t.n;
+    return '<div class="card"><details><summary><div class="sum-top"><b>' + fechaBonita(f) + '</b><b>' + fmt(res) + '</b></div>' +
+      '<div class="sub">Pagados ' + fmt(t.p) + ' · Abono ' + fmt(t.a) + ' · Nuevos ' + fmt(t.n) + (histTienda ? '' : ' · Venta ' + fmt(v)) + '</div></summary>' +
+      '<div style="margin-top:6px">' + dms.map(m => '<div class="item"><div class="row"><b>' + esc(m.concepto) + '</b><b>' + fmt(m.pagados + m.abono - m.nuevos) + '</b></div><div class="sub">' +
+        (m.pagados ? 'Pagados ' + fmt(m.pagados) + ' · ' : '') + (m.abono ? 'Abono ' + fmt(m.abono) + ' · ' : '') + (m.nuevos ? 'Nuevos ' + fmt(m.nuevos) : 'Sin montos') + '</div></div>').join('') +
+      (histTienda ? '' : '<div class="sub">Venta del día: ' + fmt(v) + ' · Resultado: ' + fmt(res) + '</div>') +
+      '</div></details></div>';
+  }).join('');
+  host.innerHTML = html;
+}
+
+/* ========== Cobro (diálogo) ========== */
+let ctx = null;
+function cobrar(tid, cid){
+  const c = cid && DB.creditos.find(x => x.id === cid);
+  ctx = {tid, cid};
+  $('#dT').textContent = tienda(tid).nombre;
+  $('#dS').textContent = 'Saldo pendiente: ' + fmt(c ? c.saldo : saldoTienda(tid));
+  $('#cMonto').value = c ? c.saldo : saldoTienda(tid);
+  $('#dlg').showModal();
+}
+function okCobro(){
+  const m = num($('#cMonto').value); if (m <= 0) return toast('Escribe el monto cobrado');
+  const {tid, cid} = ctx, c = cid && DB.creditos.find(x => x.id === cid);
+  const total = m >= (c ? c.saldo : saldoTienda(tid)) - 0.009, h = hoy();
+  const aplicado = aplicarPago(tid, m, h, cid);
+  const mov = {id: uid(), fecha: h, tiendaId: tid, concepto: tienda(tid).nombre, pagados: total ? m : 0, abono: total ? 0 : m, nuevos: 0, aplicado: aplicado, creditoNuevoId: null};
+  DB.movs.push(mov); save(); $('#dlg').close(); render();
+  if (confirm('Cobro registrado. ¿Imprimir ticket?')) ticketMov(mov);
+}
+
+/* ========== Anular movimiento ========== */
+function anularMov(id){
+  const mi = DB.movs.findIndex(m => m.id === id);
+  if (mi < 0) return;
+  const mov = DB.movs[mi];
+  if (!confirm('¿Anular el movimiento "' + mov.concepto + '" (' + mov.fecha + ')? Se devolverán los cobros a los créditos.')) return;
+
+  // Validar que la reversión cuadra antes de tocar nada
+  const apps = mov.aplicado || [];
+  if ((mov.pagados || mov.abono) && !mov.aplicado){
+    return toast('No se puede anular: este movimiento no tiene detalle de aplicación');
+  }
+  const usados = {};
+  const rev = [];
+  for (const ap of apps){
+    const c = DB.creditos.find(x => x.id === ap.creditoId);
+    if (!c) return toast('No se puede anular: falta un crédito del movimiento');
+    const lista = usados[c.id] || (usados[c.id] = []);
+    const pi = c.pagos.findIndex((p, i) => p.f === mov.fecha && +p.m === +ap.monto && lista.indexOf(i) < 0);
+    if (pi < 0) return toast('No se puede anular: los pagos ya no cuadran');
+    lista.push(pi);
+    rev.push({c: c, monto: ap.monto});
+  }
+
+  // Crédito nuevo creado por este movimiento (si lo hubo)
+  let nuevo = null;
+  if (mov.creditoNuevoId) nuevo = DB.creditos.find(x => x.id === mov.creditoNuevoId);
+  else if (mov.nuevos){
+    const cand = DB.creditos.filter(x => x.tiendaId === mov.tiendaId && x.fechaOtorgado === mov.fecha && +x.monto === +mov.nuevos && x.pagos.length === 0);
+    if (cand.length === 1) nuevo = cand[0];
+  }
+
+  // Revertir los pagos: quitar el abono del crédito y devolver el saldo
+  for (const r of rev){
+    const pi = r.c.pagos.findIndex(p => p.f === mov.fecha && +p.m === +r.monto);
+    if (pi >= 0) r.c.pagos.splice(pi, 1);
+    r.c.saldo = +(r.c.saldo + r.monto).toFixed(2);
+    if (r.c.estado === 'pagado') r.c.estado = 'pendiente';
+  }
+  let avisoNuevo = '';
+  if (nuevo){
+    if (nuevo.pagos.length === 0){
+      DB.creditos = DB.creditos.filter(x => x.id !== nuevo.id);
+    } else {
+      avisoNuevo = ' El crédito nuevo se conservó porque ya tiene pagos.';
+    }
+  }
+  DB.movs.splice(mi, 1);
+  save(); render();
+  toast('Movimiento anulado.' + avisoNuevo);
+}
+
+/* ========== Importar respaldo ========== */
+function importarRespaldo(file){
+  if (!file) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    let data;
+    try { data = JSON.parse(rd.result); } catch(e){ toast('El archivo no es un JSON válido'); return; }
+    if (!data || !Array.isArray(data.tiendas) || !Array.isArray(data.creditos) || !Array.isArray(data.movs)){
+      toast('Respaldo inválido: debe tener tiendas, créditos y movimientos'); return;
+    }
+    if (!confirm('Se reemplazarán TODOS los datos actuales por los del respaldo (' + data.tiendas.length + ' tiendas, ' + data.creditos.length + ' créditos, ' + data.movs.length + ' movimientos). ¿Continuar?')) return;
+    DB = {tiendas: data.tiendas, creditos: data.creditos, movs: data.movs, ventas: (data.ventas && typeof data.ventas === 'object') ? data.ventas : {}};
+    save(); render(); go('hoy');
+    toast('Respaldo importado');
+  };
+  rd.readAsText(file);
+}
+
+/* ========== Guardar movimiento nuevo ========== */
+let plazoSel = '2';
+async function guardar(){
+  const nombre = $('#fNombre').value.trim(); if (!nombre) return toast('Escribe la tienda o concepto');
+  const pag = num($('#fPag').value), ab = num($('#fAb').value), nue = num($('#fNue').value);
+  if (!pag && !ab && !nue) return toast('Captura al menos un monto');
+  let plazo = plazoSel === 'x' ? Math.round(num($('#fDias').value)) : +plazoSel;
+  if (nue && plazo < 1) return toast('Escribe los días de plazo');
+  const h = hoy(), radio = Math.min(500, Math.max(20, num($('#fRadio').value) || 100));
+  let c = null; try{ c = await pos(); }catch(e){}
+  let t = getTienda(nombre);
+  if (!t){ t = {id: uid(), nombre, lat: null, lng: null, radio}; DB.tiendas.push(t); }
+  if (c && (t.lat == null || $('#fAct').checked)){ t.lat = c.latitude; t.lng = c.longitude; }
+  t.radio = radio;
+  const aplicado = [];
+  if (pag) aplicado.push(...aplicarPago(t.id, pag, h));
+  if (ab) aplicado.push(...aplicarPago(t.id, ab, h));
+  let nuevoId = null;
+  if (nue){
+    const nc = {id: uid(), tiendaId: t.id, monto: nue, saldo: nue, plazo, fechaOtorgado: h, fechaCobro: sumaDias(h, plazo), estado: 'pendiente', pagos: []};
+    DB.creditos.push(nc); nuevoId = nc.id;
+  }
+  const mov = {id: uid(), fecha: h, tiendaId: t.id, concepto: t.nombre, pagados: pag, abono: ab, nuevos: nue, aplicado: aplicado, creditoNuevoId: nuevoId};
+  DB.movs.push(mov); save();
+  ['fNombre','fPag','fAb','fNue','fDias'].forEach(i => $('#' + i).value = ''); $('#fAct').checked = false;
+  toast(c ? 'Guardado con ubicación GPS' : 'Guardado sin GPS: revisa el permiso de ubicación');
+  go('hoy');
+  if (confirm('¿Imprimir ticket de ' + t.nombre + '?')) ticketMov(mov);
+}
+
+/* ========== Navegación y eventos ========== */
+function go(tab){
+  document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === 'v-' + tab));
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab === tab));
+  render(); scrollTo(0, 0);
+}
+function render(){
+  $('#dl').innerHTML = DB.tiendas.map(t => '<option value="' + esc(t.nombre) + '">').join('');
+  vistaHoy(); vistaBuscar(); vistaHistorial();
+}
+document.addEventListener('click', async e => {
+  const tb = e.target.closest('[data-tab]'); if (tb) return go(tb.dataset.tab);
+  const fb = e.target.closest('[data-f]');
+  if (fb){ filtroHoy = fb.dataset.f; vistaHoy(); return; }
+  const pb = e.target.closest('#plazo button');
+  if (pb){ plazoSel = pb.dataset.p; document.querySelectorAll('#plazo button').forEach(b => b.classList.toggle('on', b === pb)); $('#fDias').hidden = plazoSel !== 'x'; return; }
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const a = b.dataset.a;
+  if (a === 'detectar') detectar();
+  else if (a === 'cobrar'){ $('#dlg').open ? 0 : cobrar(b.dataset.t, b.dataset.c); }
+  else if (a === 'okcobro') okCobro();
+  else if (a === 'cancel') $('#dlg').close();
+  else if (a === 'guardar') guardar();
+  else if (a === 'pmov') ticketMov(DB.movs.find(m => m.id === b.dataset.m));
+  else if (a === 'anular') anularMov(b.dataset.m);
+  else if (a === 'pdia') ticketDia();
+  else if (a === 'histtienda'){ histTienda = b.dataset.t; go('hist'); }
+  else if (a === 'histtodo'){ histTienda = null; vistaHistorial(); }
+  else if (a === 'importar') $('#impFile').click();
+  else if (a === 'gpsup'){
+    try{ const c = await pos(), t = tienda(b.dataset.t); t.lat = c.latitude; t.lng = c.longitude; save(); toast('Ubicación guardada'); render(); }
+    catch(err){ toast('No pude obtener tu ubicación'); }
+  }
+  else if (a === 'backup'){
+    const u = URL.createObjectURL(new Blob([JSON.stringify(DB)], {type:'application/json'}));
+    const l = document.createElement('a'); l.href = u; l.download = 'cobros-respaldo-' + hoy() + '.json'; l.click(); URL.revokeObjectURL(u);
+  }
+});
+$('#q').addEventListener('input', vistaBuscar);
+$('#impFile').addEventListener('change', e => { importarRespaldo(e.target.files[0]); e.target.value = ''; });
+
+/* ========== Inicio ========== */
+$('#fecha').textContent = new Date().toLocaleDateString('es-MX', {weekday:'long', day:'numeric', month:'long'});
+render();
+detectar();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
