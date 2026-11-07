@@ -1,6 +1,6 @@
 /* Cobros de ruta — service worker offline, cache-first del app shell */
 var CACHE = 'cobros-v2';
-var SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+var SHELL = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) {

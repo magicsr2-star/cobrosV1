@@ -1,1 +1,19 @@
-{"background_color":"#10233a","description":"Ventas a crédito y cobros en ruta, sin internet.","display":"standalone","icons":[{"sizes":"192x192","src":"icon-192.png","type":"image/png"},{"sizes":"512x512","src":"icon-512.png","type":"image/png"}],"name":"Cobros de ruta","orientation":"portrait","scope":"./","short_name":"Cobros","start_url":"./index.html","theme_color":"#10233a"}
+{
+  "background_color": "#10233a",
+  "description": "Ventas a crédito y cobros en ruta, sin internet.",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "name": "Cobros de ruta",
+  "orientation": "portrait",
+  "scope": "./",
+  "short_name": "Cobros",
+  "start_url": "./index.html",
+  "theme_color": "#10233a"
+}
