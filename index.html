@@ -271,7 +271,19 @@ function raw(fn){
 }
 function imprimir(bytes){
   let s = ''; bytes.forEach(b => s += String.fromCharCode(b));
-  location.href = 'rawbt:base64,' + btoa(s);
+  // Clic en enlace (en vez de location.href): asi el esquema rawbt:
+  // se dispara desde el toque y no saca a la app de su pagina.
+  const a = document.createElement('a');
+  a.href = 'rawbt:base64,' + btoa(s);
+  document.body.appendChild(a); a.click(); a.remove();
+  toast('Abriendo RawBT… Si no abre, instala RawBT y elige tu impresora dentro de esa app');
+}
+function ticketPrueba(){
+  imprimir(raw(p => {
+    cab(p, 'COBROS DE RUTA', hoy());
+    p.txt('Prueba de impresion\n');
+    p.txt('Si lees esto, la impresora\nesta lista.\n'); pie(p);
+  }));
 }
 const cab = (p, titulo, fecha) => {
   p.cmd(27,64, 27,97,1, 27,69,1); p.txt(titulo + '\n'); p.cmd(27,69,0);
@@ -355,6 +367,7 @@ function vistaHoy(){
     '<div class="row res"><span>Resultado del día</span><b id="res">' + fmt(venta + t.p + t.a - t.n) + '</b></div>' +
     '<div class="sub">Venta + pagados + abono − nuevos</div>' +
     '<button class="btn sec big" data-a="pdia">Imprimir resumen del día</button>' +
+    '<button class="btn sec big" data-a="ptest">Probar impresora</button>' +
   '</div>';
 
   $('#venta').oninput = e => {
@@ -560,6 +573,7 @@ document.addEventListener('click', async e => {
   else if (a === 'pmov') ticketMov(DB.movs.find(m => m.id === b.dataset.m));
   else if (a === 'anular') anularMov(b.dataset.m);
   else if (a === 'pdia') ticketDia();
+  else if (a === 'ptest') ticketPrueba();
   else if (a === 'histtienda'){ histTienda = b.dataset.t; go('hist'); }
   else if (a === 'histtodo'){ histTienda = null; vistaHistorial(); }
   else if (a === 'importar') $('#impFile').click();
