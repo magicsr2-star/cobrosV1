@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/paper"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ink"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cobros de ruta"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#B9C6D6"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- HOY -->
+            <LinearLayout
+                android:id="@+id/secHoy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/tvGps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Toca el botón para saber si estás en una tienda guardada."
+                        android:textSize="15sp" android:textColor="@color/ink" />
+
+                    <Button
+                        android:id="@+id/btnDetectar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:text="Detectar tienda"
+                        android:textColor="@color/ink"  android:backgroundTint="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Por cobrar hoy"
+                        android:textSize="16sp"
+                        android:textStyle="bold" android:textColor="@color/ink" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+
+                        <Button android:id="@+id/chipTodos" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:background="@drawable/bg_btn_primary" android:text="Todos" android:textColor="@color/white" android:textSize="13sp"  android:backgroundTint="@null" />
+                        <Button android:id="@+id/chipVencidos" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:background="@drawable/bg_btn_secondary" android:text="Vencidos" android:textColor="@color/ink" android:textSize="13sp"  android:backgroundTint="@null" />
+                        <Button android:id="@+id/chipHoy" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:background="@drawable/bg_btn_secondary" android:text="Vencen hoy" android:textColor="@color/ink" android:textSize="13sp"  android:backgroundTint="@null" />
+                        <Button android:id="@+id/chipCobrados" android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1" android:background="@drawable/bg_btn_secondary" android:text="Cobrados" android:textColor="@color/ink" android:textSize="13sp"  android:backgroundTint="@null" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="12dp">
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                            <TextView android:id="@+id/kpiTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$0.00" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/ink" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Por cobrar" android:textColor="@color/mute" android:textSize="12sp" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                            <TextView android:id="@+id/kpiCobrado" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$0.00" android:textColor="@color/ok" android:textSize="17sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cobrado" android:textColor="@color/mute" android:textSize="12sp" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
+                            <TextView android:id="@+id/kpiFalta" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="$0.00" android:textColor="@color/warn" android:textSize="17sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Falta" android:textColor="@color/mute" android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/pbProgreso"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"
+                        android:layout_marginTop="10dp"
+                        android:max="100"
+                        android:progress="0" />
+
+                    <TextView
+                        android:id="@+id/tvProgreso"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="0% cobrado"
+                        android:textColor="@color/mute"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:id="@+id/listHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="6dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cobros realizados"
+                        android:textSize="16sp"
+                        android:textStyle="bold" android:textColor="@color/ink" />
+
+                    <LinearLayout
+                        android:id="@+id/listMovs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="6dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Venta del día"
+                        android:textSize="14sp"
+                        android:textStyle="bold" android:textColor="@color/ink" />
+
+                    <EditText
+                        android:id="@+id/etVenta"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:hint="0.00"
+                        android:inputType="numberDecimal"
+                        android:padding="12dp" android:textColor="@color/ink" android:textColorHint="@color/mute" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_dark_card"
+                        android:orientation="horizontal"
+                        android:padding="12dp"
+                        android:layout_marginTop="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Resultado del día"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvResultado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="$0.00"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Venta + pagados + abono − nuevos"
+                        android:textColor="@color/mute"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnResumen"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:text="Imprimir resumen del día"
+                        android:textColor="@color/ink"  android:backgroundTint="@null" />
+
+                    <Button
+                        android:id="@+id/btnProbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:text="Probar impresora"
+                        android:textColor="@color/ink"  android:backgroundTint="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- AGREGAR -->
+            <LinearLayout
+                android:id="@+id/secAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nuevo movimiento"
+                        android:textSize="16sp"
+                        android:textStyle="bold" android:textColor="@color/ink" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Concepto o tienda" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/ink" />
+                    <AutoCompleteTextView
+                        android:id="@+id/etNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:hint="Ej. Abarrotes Eva"
+                        android:padding="12dp" android:textColor="@color/ink" android:textColorHint="@color/mute" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="12dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="5dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Créditos pagados" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/ink" />
+                            <EditText android:id="@+id/etPag" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="4dp" android:background="@drawable/bg_btn_secondary" android:hint="0" android:inputType="numberDecimal" android:padding="12dp" android:textColor="@color/ink" android:textColorHint="@color/mute" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="5dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Abono" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/ink" />
+                            <EditText android:id="@+id/etAb" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="4dp" android:background="@drawable/bg_btn_secondary" android:hint="0" android:inputType="numberDecimal" android:padding="12dp" android:textColor="@color/ink" android:textColorHint="@color/mute" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Créditos nuevos" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/ink" />
+                    <EditText android:id="@+id/etNue" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="4dp" android:background="@drawable/bg_btn_secondary" android:hint="0" android:inputType="numberDecimal" android:padding="12dp" android:textColor="@color/ink" android:textColorHint="@color/mute" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Plazo del crédito nuevo" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/ink" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="4dp">
+                        <Button android:id="@+id/btnP2" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:background="@drawable/bg_btn_primary" android:text="2 días" android:textColor="@color/white"  android:backgroundTint="@null" />
+                        <Button android:id="@+id/btnP7" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:background="@drawable/bg_btn_secondary" android:text="1 semana" android:textColor="@color/ink"  android:backgroundTint="@null" />
+                        <Button android:id="@+id/btnPx" android:layout_width="0dp" android:layout_height="48dp" android:layout_weight="1" android:background="@drawable/bg_btn_secondary" android:text="Otro" android:textColor="@color/ink"  android:backgroundTint="@null" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etDias"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:hint="Días de plazo"
+                        android:inputType="number"
+                        android:padding="12dp"
+                        android:visibility="gone" android:textColor="@color/ink" android:textColorHint="@color/mute" />
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:text="Margen GPS en metros" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/ink" />
+                    <EditText android:id="@+id/etRadio" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginTop="4dp" android:background="@drawable/bg_btn_secondary" android:inputType="number" android:padding="12dp" android:text="100" android:textColor="@color/ink" android:textColorHint="@color/mute" />
+
+                    <CheckBox
+                        android:id="@+id/cbAct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Actualizar la ubicación de esta tienda" android:textColor="@color/ink" />
+
+                    <Button
+                        android:id="@+id/btnGuardar"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_btn_primary"
+                        android:text="Guardar y capturar GPS"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"  android:backgroundTint="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- BUSCAR -->
+            <LinearLayout
+                android:id="@+id/secBuscar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_dark_card"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/tvPrinter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Impresora: sin elegir"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnPrinter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:text="Elegir impresora Bluetooth"
+                        android:textColor="@color/ink"  android:backgroundTint="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Buscar tienda" android:textSize="14sp" android:textStyle="bold" android:textColor="@color/ink" />
+                    <EditText
+                        android:id="@+id/etBuscar"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:hint="Nombre de la tienda"
+                        android:padding="12dp" android:textColor="@color/ink" android:textColorHint="@color/mute" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_dark_card"
+                    android:orientation="vertical"
+                    android:padding="14dp"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/tvCartera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total por cobrar: $0.00"
+                        android:textColor="@color/white"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvCarteraSub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 tiendas con deuda"
+                        android:textColor="#B9C6D6"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/listTiendas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <Button
+                    android:id="@+id/btnBackup"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_btn_secondary"
+                    android:text="Descargar respaldo de datos"
+                    android:textColor="@color/ink"  android:backgroundTint="@null" />
+
+                <Button
+                    android:id="@+id/btnImport"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_btn_secondary"
+                    android:text="Importar respaldo"
+                    android:textColor="@color/ink"  android:backgroundTint="@null" />
+            </LinearLayout>
+
+            <!-- HISTORIAL -->
+            <LinearLayout
+                android:id="@+id/secHist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnVerTodo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/bg_btn_secondary"
+                    android:text="Ver todo el historial"
+                    android:textColor="@color/ink"
+                    android:visibility="gone"  android:backgroundTint="@null" />
+
+                <LinearLayout
+                    android:id="@+id/listHist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/card"
+        android:orientation="horizontal">
+
+        <Button android:id="@+id/navHoy" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@android:color/transparent" android:text="Hoy" android:textColor="@color/ink" android:textStyle="bold"  android:backgroundTint="@null"  android:textSize="12sp" android:maxLines="1"/>
+        <Button android:id="@+id/navAdd" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@android:color/transparent" android:text="Agregar" android:textColor="@color/mute"  android:backgroundTint="@null"  android:textSize="12sp" android:maxLines="1"/>
+        <Button android:id="@+id/navBuscar" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@android:color/transparent" android:text="Buscar" android:textColor="@color/mute"  android:backgroundTint="@null"  android:textSize="12sp" android:maxLines="1"/>
+        <Button android:id="@+id/navHist" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@android:color/transparent" android:text="Historial" android:textColor="@color/mute"  android:backgroundTint="@null"  android:textSize="12sp" android:maxLines="1"/>
+    </LinearLayout>
+</LinearLayout>

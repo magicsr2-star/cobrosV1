@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="11dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/itNombre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:textStyle="bold" android:textColor="@color/ink" />
+
+        <TextView
+            android:id="@+id/itSaldo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold" android:textColor="@color/ink" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/itSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/mute"
+        android:textSize="13sp" />
+
+    <Button
+        android:id="@+id/itBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_btn_primary"
+        android:text="Cobrar"
+        android:textColor="@color/white"  android:backgroundTint="@null" />
+</LinearLayout>
