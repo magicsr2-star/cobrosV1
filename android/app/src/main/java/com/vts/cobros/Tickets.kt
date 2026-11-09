@@ -19,7 +19,7 @@ object Tickets {
     class Builder {
         private val out = mutableListOf<Byte>()
         fun cmd(vararg b: Int) = apply { b.forEach { out.add(it.toByte()) } }
-        fun txt(s: String) = apply { out.addAll(sinAcentos(s).toByteArray(Charsets.US_ASCII).toList()) }
+        fun txt(s: String) = apply { out.addAll(sinAcentos(s).replace("\n", "\r\n").toByteArray(Charsets.US_ASCII).toList()) }
         fun line(s: String) = txt(s + "\n")
         fun build(): ByteArray = out.toByteArray()
     }
