@@ -16,14 +16,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" android:textColor="@color/ink" />
 
         <TextView
             android:id="@+id/itSaldo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" android:textColor="@color/ink" />
     </LinearLayout>
 
     <TextView
@@ -41,5 +41,5 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/bg_btn_primary"
         android:text="Cobrar"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"  android:backgroundTint="@null" />
 </LinearLayout>

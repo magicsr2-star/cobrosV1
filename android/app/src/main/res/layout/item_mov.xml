@@ -16,13 +16,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" android:textColor="@color/ink" />
 
         <TextView
             android:id="@+id/imMontos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp" />
+            android:textSize="13sp" android:textColor="@color/ink" />
     </LinearLayout>
 
     <LinearLayout
@@ -39,7 +39,7 @@
             android:background="@drawable/bg_btn_secondary"
             android:text="Imprimir"
             android:textColor="@color/ink"
-            android:textSize="13sp" />
+            android:textSize="13sp"  android:backgroundTint="@null" />
 
         <Button
             android:id="@+id/imAnular"
@@ -48,6 +48,6 @@
             android:background="@drawable/bg_btn_secondary"
             android:text="Anular"
             android:textColor="@color/bad"
-            android:textSize="13sp" />
+            android:textSize="13sp"  android:backgroundTint="@null" />
     </LinearLayout>
 </LinearLayout>

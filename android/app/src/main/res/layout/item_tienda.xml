@@ -18,14 +18,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" android:textColor="@color/ink" />
 
         <TextView
             android:id="@+id/tiSaldo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" android:textColor="@color/ink" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,7 +49,7 @@
             android:background="@drawable/bg_btn_primary"
             android:text="Cobrar"
             android:textColor="@color/white"
-            android:textSize="13sp" />
+            android:textSize="13sp"  android:backgroundTint="@null" />
 
         <Button
             android:id="@+id/tiGps"
@@ -59,7 +59,7 @@
             android:background="@drawable/bg_btn_secondary"
             android:text="Guardar ubicación"
             android:textColor="@color/ink"
-            android:textSize="13sp" />
+            android:textSize="13sp"  android:backgroundTint="@null" />
 
         <Button
             android:id="@+id/tiMovs"
@@ -68,6 +68,6 @@
             android:background="@drawable/bg_btn_secondary"
             android:text="Ver movimientos"
             android:textColor="@color/ink"
-            android:textSize="13sp" />
+            android:textSize="13sp"  android:backgroundTint="@null" />
     </LinearLayout>
 </LinearLayout>

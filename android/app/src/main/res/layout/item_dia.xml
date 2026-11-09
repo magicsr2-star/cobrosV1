@@ -18,14 +18,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" android:textColor="@color/ink" />
 
         <TextView
             android:id="@+id/hdResultado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" android:textColor="@color/ink" />
     </LinearLayout>
 
     <TextView
@@ -51,5 +51,5 @@
         android:background="@drawable/bg_btn_secondary"
         android:text="Ver detalle"
         android:textColor="@color/ink"
-        android:textSize="13sp" />
+        android:textSize="13sp"  android:backgroundTint="@null" />
 </LinearLayout>
